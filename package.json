@@ -1,0 +1,18 @@
+{
+  "name": "circular-slider-task",
+  "version": "1.0.0",
+  "description": "Circular slider task.",
+  "workspaces": [
+    "./packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DomenceK/circular-slider-task.git"
+  },
+  "author": "Domen Dornik",
+  "license": "ISC",
+  "homepage": "https://github.com/DomenceK/circular-slider-task#readme"
+}
