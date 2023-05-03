@@ -1,7 +1,2 @@
-export default class CircularSlider {
-    _options
-
-    constructor(options) {
-        this._options = options
-    }
-}
+import { CircularSlider } from "./src"
+export default CircularSlider
