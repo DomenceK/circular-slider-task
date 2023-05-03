@@ -1,11 +1,11 @@
 {
-  "name": "@circular-slider-task/circular-slider",
-  "version": "1.0.0",
-  "description": "Circular slider module.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Domen Dornik",
-  "license": "ISC"
+    "name": "@circular-slider-task/circular-slider",
+    "version": "1.0.0",
+    "description": "Circular slider module.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Domen Dornik",
+    "license": "ISC"
 }

@@ -1,7 +1,7 @@
 export default class CircularSlider {
-  _options;
+    _options
 
-  constructor(options) {
-    this._options = options;
-  }
+    constructor(options) {
+        this._options = options
+    }
 }

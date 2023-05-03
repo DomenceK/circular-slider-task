@@ -1,18 +1,27 @@
 {
-  "name": "circular-slider-task",
-  "version": "1.0.0",
-  "description": "Circular slider task.",
-  "workspaces": [
-    "./packages/*"
-  ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DomenceK/circular-slider-task.git"
-  },
-  "author": "Domen Dornik",
-  "license": "ISC",
-  "homepage": "https://github.com/DomenceK/circular-slider-task#readme"
+    "name": "circular-slider-task",
+    "version": "1.0.0",
+    "description": "Circular slider task.",
+    "workspaces": [
+        "./packages/*"
+    ],
+    "scripts": {
+        "bootstrap:dev": "npm run dev -w @circular-slider-task/client",
+        "bootstrap": "npm run preview -w @circular-slider-task/client"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/DomenceK/circular-slider-task.git"
+    },
+    "author": "Domen Dornik",
+    "license": "ISC",
+    "homepage": "https://github.com/DomenceK/circular-slider-task#readme",
+    "devDependencies": {
+        "eslint": "8.39.0",
+        "eslint-config-prettier": "8.8.0",
+        "eslint-plugin-import": "2.27.5",
+        "eslint-plugin-prettier": "4.2.1",
+        "prettier": "2.8.8",
+        "vite": "4.3.4"
+    }
 }
