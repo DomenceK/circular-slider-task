@@ -1,3 +1,5 @@
+const colorRx = /(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^)]*\)/
+
 const handler = {
     /**
      * A trap handler for setting the value of a property.
@@ -20,6 +22,8 @@ const handler = {
             case "color":
                 if (typeof value !== "string") {
                     throw new TypeError(`${key} must be a string`)
+                } else if (!colorRx.test(value)) {
+                    throw new TypeError(`${key} not a valid color`)
                 }
                 break
             case "radius":

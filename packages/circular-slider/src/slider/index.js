@@ -25,7 +25,7 @@ export class Slider {
      */
     constructor(options) {
         this._options = options
-        this._sliderNode = Slider.createSliderNode(this._options.radius)
+        this._sliderNode = Slider.createSliderNode(this._options)
         this._knobNode = this._sliderNode.querySelector("#slider-knob")
     }
 
@@ -36,23 +36,76 @@ export class Slider {
     /**
      * A static method that creates new slider node.
      * @static
-     * @param {number} radius - The circle radius.
+     * @param {object} options - An object containing options data.
      * @returns {object} New slider node.
      */
-    static createSliderNode(radius) {
-        const slider = document.createElement("div")
-        slider.setAttribute("id", "slider")
+    static createSliderNode(options) {
+        const { radius, color } = options
 
-        const dimension = `${radius * 2}px`
-        slider.style.width = dimension
-        slider.style.height = dimension
+        /**
+         * @param {number} offset - Default 10px
+         * @param {number} strokeWidth - Width of stripe circle border, defaults to 20px
+         */
+        const offset = 10
+        const strokeWidth = 20
 
-        const sliderKnob = document.createElement("div")
-        sliderKnob.setAttribute("id", "slider-knob")
-        sliderKnob.style.left = `${radius - 10}px`
+        /* Full circle width with default stroke width and offset */
+        const containerDimensions = radius * 2 + strokeWidth + offset
 
-        slider.appendChild(sliderKnob)
+        const svgContainer = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+        svgContainer.classList.add("svg-container")
+        svgContainer.setAttribute("width", `${containerDimensions}px`)
+        svgContainer.setAttribute("height", `${containerDimensions}px`)
 
-        return slider
+        /* Center dimension. Used for cx and cy attribute */
+        const dimensions2 = containerDimensions / 2
+
+        const circleElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        circleElement.classList.add("svg-border-track")
+        circleElement.setAttribute("cx", `${dimensions2}px`)
+        circleElement.setAttribute("cy", `${dimensions2}px`)
+        circleElement.setAttribute("r", `${radius}px`)
+
+        const progressElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        progressElement.classList.add("svg-progress-indicator")
+        progressElement.setAttribute("cx", `${dimensions2}px`)
+        progressElement.setAttribute("cy", `${dimensions2}px`)
+        progressElement.setAttribute("r", `${radius}px`)
+        progressElement.setAttribute("stroke-linecap", "butt")
+        progressElement.setAttribute("stroke", color)
+
+        /* Setting up stroke-dasharray requires calculating circle circumfence   */
+        progressElement.setAttribute("stroke-dasharray", `0 ${Slider.getCircumfence(radius)}px`)
+
+        const emptyCircleElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        emptyCircleElement.classList.add("svg-inner-circle-empty")
+        emptyCircleElement.setAttribute("cx", `${dimensions2}px`)
+        emptyCircleElement.setAttribute("cy", `${dimensions2}px`)
+        emptyCircleElement.setAttribute("r", `${radius}px`)
+
+        const knobElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        knobElement.classList.add("svg-knob")
+
+        /* Setting default knob position. Full container width minus half stroke width minus half offset */
+        knobElement.setAttribute("cx", `${containerDimensions - strokeWidth / 2 - offset / 2}px`)
+        knobElement.setAttribute("cy", `${containerDimensions / 2}px`)
+
+        /* Painting elements on main svg container. Knob needs to be on top, so it must be painted last */
+        svgContainer.appendChild(circleElement)
+        svgContainer.appendChild(progressElement)
+        svgContainer.appendChild(emptyCircleElement)
+        svgContainer.appendChild(knobElement)
+
+        return svgContainer
+    }
+
+    /**
+     * A static method that calculates circle circumfence.
+     * @static
+     * @param {number} radius - The circle radius.
+     * @returns {number} Circumfence.
+     */
+    static getCircumfence(radius) {
+        return 2 * Math.PI * radius
     }
 }
