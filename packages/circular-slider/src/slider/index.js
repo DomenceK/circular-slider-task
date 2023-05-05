@@ -42,7 +42,14 @@ export class Slider {
     _progressIndicatorNode
 
     /**
-     * Getter for accessing the "radius" property from the options object
+     * The circle track node that allow tap the spot on a slider.
+     * @private
+     * @type {object}
+     */
+    _circleTrackTapNode
+
+    /**
+     * Getter for accessing the "radius" property from the options object.
      * @private
      * @type {number}
      */
@@ -66,9 +73,10 @@ export class Slider {
         this._sliderNode = Slider.createSliderNode(this._options)
         this._knobNode = this._sliderNode.querySelector(".svg-knob")
         this._progressIndicatorNode = this._sliderNode.querySelector(".svg-progress-indicator")
+        this._circleTrackTapNode = this._sliderNode.querySelector(".svg-track-tap-overlay")
 
         /* Storing a reference to the event listeners functions */
-        this._handleMoveEvent = this._handleMoveEvent.bind(this)
+        this._handleEvent = this._handleEvent.bind(this)
         this._attachMovingListeners = this._attachMovingListeners.bind(this)
         this._removeMovingListeners = this._removeMovingListeners.bind(this)
 
@@ -94,6 +102,7 @@ export class Slider {
         this._knobNode.addEventListener("touchstart", this._attachMovingListeners, {
             passive: true,
         })
+        this._circleTrackTapNode.addEventListener("click", this._handleEvent)
     }
 
     /**
@@ -101,8 +110,8 @@ export class Slider {
      * @private
      */
     _attachMovingListeners() {
-        document.addEventListener("mousemove", this._handleMoveEvent)
-        document.addEventListener("touchmove", this._handleMoveEvent, {
+        document.addEventListener("mousemove", this._handleEvent)
+        document.addEventListener("touchmove", this._handleEvent, {
             passive: true,
         })
 
@@ -117,8 +126,8 @@ export class Slider {
      * @private
      */
     _removeMovingListeners() {
-        document.removeEventListener("mousemove", this._handleMoveEvent)
-        document.removeEventListener("touchmove", this._handleMoveEvent)
+        document.removeEventListener("mousemove", this._handleEvent)
+        document.removeEventListener("touchmove", this._handleEvent)
 
         document.removeEventListener("mouseup", this._removeMovingListeners)
         document.removeEventListener("touchmove", this._removeMovingListeners)
@@ -130,16 +139,20 @@ export class Slider {
      * @param {Event} event - Mouse / touch event.
      * @private
      */
-    _handleMoveEvent(event) {
+    _handleEvent(event) {
         const rect = this._sliderNode.getBoundingClientRect()
 
         /* get X and Y coordinates of the center of the circle relative to document */
         const centerX = rect.left + rect.width / 2
         const centerY = rect.top + rect.height / 2
 
+        // Get X and Y coordinate of touch point relative to the viewport.
+        const clientX = event.type === "touchmove" ? event.touches[0].clientX : event.clientX
+        const clientY = event.type === "touchmove" ? event.touches[0].clientY : event.clientY
+
         /* get X and Y coordinates of the mouse position relative to the center of the circle. */
-        const relativeX = event.clientX - centerX
-        const relativeY = event.clientY - centerY
+        const relativeX = clientX - centerX
+        const relativeY = clientY - centerY
 
         /* calculates the angle in radians between two points (circle center point and mouse position) */
         const radians = Math.atan2(relativeY, relativeX)
@@ -220,11 +233,12 @@ export class Slider {
         /* Setting up stroke-dasharray requires calculating circle circumfence */
         progressElement.setAttribute("stroke-dasharray", `0 ${Slider.getCircumfence(radius)}px`)
 
-        const emptyCircleElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
-        emptyCircleElement.classList.add("svg-inner-circle-empty")
-        emptyCircleElement.setAttribute("cx", `${dimensions2}px`)
-        emptyCircleElement.setAttribute("cy", `${dimensions2}px`)
-        emptyCircleElement.setAttribute("r", `${radius}px`)
+        /* Track tap element allows "tap progress" on a slider */
+        const trackTapElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        trackTapElement.classList.add("svg-track-tap-overlay")
+        trackTapElement.setAttribute("cx", `${dimensions2}px`)
+        trackTapElement.setAttribute("cy", `${dimensions2}px`)
+        trackTapElement.setAttribute("r", `${radius}px`)
 
         const knobElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
         knobElement.classList.add("svg-knob")
@@ -236,7 +250,7 @@ export class Slider {
         /* Painting elements on main svg container. Knob needs to be on top, so it must be painted last */
         svgContainer.appendChild(circleElement)
         svgContainer.appendChild(progressElement)
-        svgContainer.appendChild(emptyCircleElement)
+        svgContainer.appendChild(trackTapElement)
         svgContainer.appendChild(knobElement)
 
         return svgContainer

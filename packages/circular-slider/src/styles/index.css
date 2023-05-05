@@ -48,7 +48,7 @@
     stroke-opacity: 0.7;
 }
 
-.svg-inner-circle-empty {
+.svg-track-tap-overlay {
     fill: transparent;
     cursor: pointer;
     pointer-events: stroke;
