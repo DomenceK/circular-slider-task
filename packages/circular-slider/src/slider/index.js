@@ -1,9 +1,18 @@
 import "../styles/index.css"
+import { DrawQueue } from "../draw-queue"
+import { DEFAULT_CIRCLE_OFFSET, DEFAULT_STROKE_WIDTH } from "../defaults"
 
 /**
  * Slider - A class that represents slider instance.
  */
 export class Slider {
+    /**
+     * A static property for drawing queue. Every instance of this class shares same DrawQueue.
+     * @static
+     * @type {DrawQueue}
+     */
+    static drawQueue = new DrawQueue()
+
     /**
      * An private object containing options data.
      * @private
@@ -31,15 +40,6 @@ export class Slider {
      * @type {object}
      */
     _progressIndicatorNode
-
-    /**
-     * Getter for accessing the "container" property from the options object
-     * @private
-     * @type {object}
-     */
-    get container() {
-        return this._options.container
-    }
 
     /**
      * Getter for accessing the "radius" property from the options object
@@ -77,11 +77,11 @@ export class Slider {
     }
 
     /**
-     * Appends slider to a container and attach events listeners.
+     * Triggers drawing and attach events listeners.
      * @private
      */
     _draw() {
-        this.container.appendChild(this._sliderNode)
+        Slider.drawQueue.draw(this._options, this._sliderNode)
         this._attachEventListeners()
     }
 
@@ -192,15 +192,8 @@ export class Slider {
     static createSliderNode(options) {
         const { radius, color } = options
 
-        /**
-         * @param {number} offset - Default to 10px
-         * @param {number} strokeWidth - Width of circle stripe border, defaults to 20px
-         */
-        const offset = 10
-        const strokeWidth = 20
-
         /* Full circle width with default stroke width and offset */
-        const containerDimensions = radius * 2 + strokeWidth + offset
+        const containerDimensions = radius * 2 + DEFAULT_STROKE_WIDTH + DEFAULT_CIRCLE_OFFSET
 
         const svgContainer = document.createElementNS("http://www.w3.org/2000/svg", "svg")
         svgContainer.classList.add("svg-container")
@@ -237,7 +230,7 @@ export class Slider {
         knobElement.classList.add("svg-knob")
 
         /* Setting default knob position. Full container width minus half stroke width minus half offset */
-        knobElement.setAttribute("cx", `${containerDimensions - strokeWidth / 2 - offset / 2}px`)
+        knobElement.setAttribute("cx", `${containerDimensions - DEFAULT_STROKE_WIDTH / 2 - DEFAULT_CIRCLE_OFFSET / 2}px`)
         knobElement.setAttribute("cy", `${containerDimensions / 2}px`)
 
         /* Painting elements on main svg container. Knob needs to be on top, so it must be painted last */

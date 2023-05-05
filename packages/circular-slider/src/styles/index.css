@@ -13,16 +13,25 @@
 }
 
 /*
- * General styles
+ * Circular slider container style
+ */
+.circular-slider-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*
+ * SVG Cirlce styles
  *
- * Add general styles for svg circles and slider knob
+ * General styles for svg circles and slider knob
  *
  */
-
 .svg-container {
     max-width: 100%;
     vertical-align: middle;
     transform: rotate(-90deg); /* Orientation */
+    position: absolute;
 }
 
 .svg-border-track {
@@ -35,7 +44,7 @@
 .svg-progress-indicator {
     fill: transparent;
     stroke-width: 20px; /* Border width */
-    stroke-linecap: butt;
+    stroke-linecap: butt; /* Defining line shape */
     stroke-opacity: 0.7;
 }
 
