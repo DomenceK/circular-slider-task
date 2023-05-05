@@ -1,5 +1,5 @@
 /*
- * Root proeprties
+ * Root properties
  *
  * White color
  * Knob border color
@@ -35,7 +35,7 @@
 .svg-progress-indicator {
     fill: transparent;
     stroke-width: 20px; /* Border width */
-    stroke-linecap: round;
+    stroke-linecap: butt;
     stroke-opacity: 0.7;
 }
 
