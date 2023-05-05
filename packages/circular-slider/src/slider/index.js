@@ -134,15 +134,15 @@ export class Slider {
     }
 
     /**
-     * Handles move event when it is triggered
-     * Calculates new knob position and slider progress
+     * Handles move event when it is triggered.
+     * Calculates new knob position and slider progress.
      * @param {Event} event - Mouse / touch event.
      * @private
      */
     _handleEvent(event) {
         const rect = this._sliderNode.getBoundingClientRect()
 
-        /* get X and Y coordinates of the center of the circle relative to document */
+        // get X and Y coordinates of the center of the circle relative to document.
         const centerX = rect.left + rect.width / 2
         const centerY = rect.top + rect.height / 2
 
@@ -150,11 +150,11 @@ export class Slider {
         const clientX = event.type === "touchmove" ? event.touches[0].clientX : event.clientX
         const clientY = event.type === "touchmove" ? event.touches[0].clientY : event.clientY
 
-        /* get X and Y coordinates of the mouse position relative to the center of the circle. */
+        // get X and Y coordinates of the mouse position relative to the center of the circle.
         const relativeX = clientX - centerX
         const relativeY = clientY - centerY
 
-        /* calculates the angle in radians between two points (circle center point and mouse position) */
+        // calculates the angle in radians between two points (circle center point and mouse position).
         const radians = Math.atan2(relativeY, relativeX)
 
         /**
@@ -164,28 +164,28 @@ export class Slider {
         let degrees = radians * (180 / Math.PI) + 90
         degrees += degrees < 0 ? 360 : 0
 
-        /* get X and Y coordinates of the center of the circle relative to circle */
+        // get X and Y coordinates of the center of the circle relative to circle
         const cx = rect.width / 2
         const cy = rect.height / 2
 
         const position = Slider.calculatePosition(cx, cy, this.radius, degrees)
 
-        /* set new knob position */
+        // set new knob position
         this._knobNode.setAttribute("cx", position.x)
         this._knobNode.setAttribute("cy", position.y)
 
         const circleCircumfence = Slider.getCircumfence(this.radius)
         const progressStrokeDasharrayValue = Slider.getProgressStrokeDasharray(degrees, circleCircumfence)
 
-        /* set stroke-dasharray defining pattern to paint progress indicator overlay */
+        // set stroke-dasharray defining pattern to paint progress indicator overlay
         this._progressIndicatorNode.setAttribute("stroke-dasharray", `${progressStrokeDasharrayValue} ${circleCircumfence}`)
     }
 
     /**
      * A static method that creates new slider node.
      * @static
-     * @param {number} cx - Attribute used to define the X coordinate of the center of a circle
-     * @param {number} cy - Attribute used to define the Y coordinate of the center of a circle
+     * @param {number} cx - Attribute used to define the X coordinate of the center of a circle.
+     * @param {number} cy - Attribute used to define the Y coordinate of the center of a circle.
      * @param {number} r - The circle radius.
      * @param {number} degrees - The mouse degrees from circle center.
      * @returns {object} - Returns the X and Y coordinate of a point on the circle given its angle in degrees.
@@ -205,7 +205,7 @@ export class Slider {
     static createSliderNode(options) {
         const { radius, color } = options
 
-        /* Full circle width with default stroke width and offset */
+        // Full circle width with default stroke width and offset.
         const containerDimensions = radius * 2 + DEFAULT_STROKE_WIDTH + DEFAULT_CIRCLE_OFFSET
 
         const svgContainer = document.createElementNS("http://www.w3.org/2000/svg", "svg")
@@ -213,41 +213,41 @@ export class Slider {
         svgContainer.setAttribute("width", `${containerDimensions}px`)
         svgContainer.setAttribute("height", `${containerDimensions}px`)
 
-        /* Center dimension. Used for cx and cy attribute */
-        const dimensions2 = containerDimensions / 2
+        // Halved dimension for cx and cy attribute.
+        const halvedDimension = containerDimensions / 2
 
         const circleElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
         circleElement.classList.add("svg-border-track")
-        circleElement.setAttribute("cx", `${dimensions2}px`)
-        circleElement.setAttribute("cy", `${dimensions2}px`)
+        circleElement.setAttribute("cx", `${halvedDimension}px`)
+        circleElement.setAttribute("cy", `${halvedDimension}px`)
         circleElement.setAttribute("r", `${radius}px`)
 
         const progressElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
         progressElement.classList.add("svg-progress-indicator")
-        progressElement.setAttribute("cx", `${dimensions2}px`)
-        progressElement.setAttribute("cy", `${dimensions2}px`)
+        progressElement.setAttribute("cx", `${halvedDimension}px`)
+        progressElement.setAttribute("cy", `${halvedDimension}px`)
         progressElement.setAttribute("r", `${radius}px`)
         progressElement.setAttribute("stroke-linecap", "butt")
         progressElement.setAttribute("stroke", color)
 
-        /* Setting up stroke-dasharray requires calculating circle circumfence */
+        // Setting up stroke-dasharray requires calculating circle circumfence.
         progressElement.setAttribute("stroke-dasharray", `0 ${Slider.getCircumfence(radius)}px`)
 
-        /* Track tap element allows "tap progress" on a slider */
+        // Track tap element allows "tap progress" on a slider.
         const trackTapElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
         trackTapElement.classList.add("svg-track-tap-overlay")
-        trackTapElement.setAttribute("cx", `${dimensions2}px`)
-        trackTapElement.setAttribute("cy", `${dimensions2}px`)
+        trackTapElement.setAttribute("cx", `${halvedDimension}px`)
+        trackTapElement.setAttribute("cy", `${halvedDimension}px`)
         trackTapElement.setAttribute("r", `${radius}px`)
 
         const knobElement = document.createElementNS("http://www.w3.org/2000/svg", "circle")
         knobElement.classList.add("svg-knob")
 
-        /* Setting default knob position. Full container width minus half stroke width minus half offset */
+        // Setting default knob position. Full container width minus half stroke width minus half offset.
         knobElement.setAttribute("cx", `${containerDimensions - DEFAULT_STROKE_WIDTH / 2 - DEFAULT_CIRCLE_OFFSET / 2}px`)
         knobElement.setAttribute("cy", `${containerDimensions / 2}px`)
 
-        /* Painting elements on main svg container. Knob needs to be on top, so it must be painted last */
+        // Painting elements on main svg container. Knob needs to be on top, so it must be painted last.
         svgContainer.appendChild(circleElement)
         svgContainer.appendChild(progressElement)
         svgContainer.appendChild(trackTapElement)
