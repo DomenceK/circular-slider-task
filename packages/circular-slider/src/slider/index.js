@@ -32,10 +32,20 @@ export class Slider {
      */
     _progressIndicatorNode
 
+    /**
+     * Getter for accessing the "container" property from the options object
+     * @private
+     * @type {object}
+     */
     get container() {
         return this._options.container
     }
 
+    /**
+     * Getter for accessing the "radius" property from the options object
+     * @private
+     * @type {number}
+     */
     get radius() {
         return this._options.radius
     }
