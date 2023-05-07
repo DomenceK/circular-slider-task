@@ -1,4 +1,4 @@
-const colorRx = /(?:#|0x)(?:[a-f0-9]{3}|[a-f0-9]{6})\b|(?:rgb|hsl)a?\([^)]*\)/
+const colorRx = /(^[a-zA-Z]+$)|(#(?:[0-9a-f]{2}){2,4}|#[0-9a-f]{3}|(?:rgba?|hsla?)\((?:\d+%?(?:deg|rad|grad|turn)?(?:,|\s)+){2,3}[\s/]*[\d.]+%?\))/i
 
 const handler = {
     /**
@@ -27,6 +27,12 @@ const handler = {
                 }
                 break
             case "radius":
+                if (typeof value !== "number") {
+                    throw new TypeError(`${key} must be a number`)
+                } else if (value < 1) {
+                    throw new TypeError(`${key} must be larger than 0`)
+                }
+                break
             case "step":
             case "max":
             case "min":
