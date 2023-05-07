@@ -14,6 +14,13 @@ export class Slider {
     static drawQueue = new DrawQueue()
 
     /**
+     * An private object that holds a set of listener functions.
+     * @private
+     * @type {Set}
+     */
+    _listeners = new Set()
+
+    /**
      * An private object containing options data.
      * @private
      * @type {object}
@@ -49,15 +56,6 @@ export class Slider {
     _circleTrackTapNode
 
     /**
-     * Getter for accessing the "radius" property from the options object.
-     * @private
-     * @type {number}
-     */
-    get radius() {
-        return this._options.radius
-    }
-
-    /**
      * Creates a new Slider object.
      * @param {object} options - An object containing options data.
      * @param {object} options.container - The container of the slider.
@@ -82,6 +80,39 @@ export class Slider {
 
         /* Draw elements to container */
         this._draw()
+    }
+
+    /**
+     * Subscribe to an event - adds new listener, restrict only to "valueChanged" event.
+     * @param {string} eventName - Event name.
+     * @param {string} listener - Listener function.
+     */
+    subscribe(eventName, listener) {
+        if (eventName === "valueChanged") {
+            this._listeners.add(listener)
+        }
+    }
+
+    /**
+     * Unsubscribe from event - removes listener.
+     * @param {string} eventName - Event name.
+     * @param {string} listener - Listener function.
+     */
+    unsubscribe(eventName, listener) {
+        if (eventName === "valueChanged") {
+            this._listeners.delete(listener)
+        }
+    }
+
+    /**
+     * Triggers specific event and notify listeners.
+     * @param {string} eventName - Event name.
+     * @param {number} data - Data sent to listeners.
+     */
+    triggerEvent(eventName, data) {
+        if (eventName === "valueChanged") {
+            this._listeners.forEach((listener) => listener(data))
+        }
     }
 
     /**
@@ -168,17 +199,42 @@ export class Slider {
         const cx = rect.width / 2
         const cy = rect.height / 2
 
-        const position = Slider.calculatePosition(cx, cy, this.radius, degrees)
+        const { radius, min, max, step } = this._options
+
+        const position = Slider.calculatePosition(cx, cy, radius, degrees)
 
         // set new knob position
         this._knobNode.setAttribute("cx", position.x)
         this._knobNode.setAttribute("cy", position.y)
 
-        const circleCircumfence = Slider.getCircumfence(this.radius)
+        const circleCircumfence = Slider.getCircumfence(radius)
         const progressStrokeDasharrayValue = Slider.getProgressStrokeDasharray(degrees, circleCircumfence)
 
         // set stroke-dasharray defining pattern to paint progress indicator overlay
         this._progressIndicatorNode.setAttribute("stroke-dasharray", `${progressStrokeDasharrayValue} ${circleCircumfence}`)
+
+        const newValue = Slider.calculateValue(degrees, max, min, step)
+        // Trigger "propertyChanged" event and send new value to all listeners
+        this.triggerEvent("valueChanged", newValue)
+    }
+
+    /**
+     * A static helper method that calculates current slider value.
+     * @static
+     * @param {number} degrees - The new knob degrees from circle center.
+     * @param {number} max - Maximum slider value.
+     * @param {number} min - Minimum slider value.
+     * @param {number} step - Step between minimum and maximum.
+     * @returns {number} - Returns current step slider value.
+     */
+    static calculateValue(degrees, max, min, step) {
+        const valueRange = max - min // Gets range between min and max.
+        let currentValue = min + (degrees / 360) * valueRange // Current value based on degrees.
+
+        // Calculates step value. At currentValue % step > .5 we return next pregress step.
+        let stepValue = Math.round(currentValue / step) * step
+
+        return stepValue
     }
 
     /**
@@ -257,7 +313,7 @@ export class Slider {
     }
 
     /**
-     * A static method that calculates circle circumfence.
+     * A static helper method that calculates circle circumfence.
      * @static
      * @param {number} radius - The circle radius.
      * @returns {number} Circumfence.
@@ -267,7 +323,7 @@ export class Slider {
     }
 
     /**
-     * A static method that calculates stroke dasharray used for showing progress of circle.
+     * A static helper method that calculates stroke dasharray used for showing progress of circle.
      * @static
      * @param {number} degrees - The circle radius.
      * @param {number} circumfence - The circle circumfence.
