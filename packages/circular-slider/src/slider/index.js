@@ -1,6 +1,6 @@
 import "../styles/index.css"
 import { DrawQueue } from "../draw-queue"
-import { DEFAULT_CIRCLE_OFFSET, DEFAULT_STROKE_WIDTH } from "../defaults"
+import { DEFAULT_CIRCLE_OFFSET, DEFAULT_STROKE_WIDTH, DEFAULT_SLIDER_THRESHOLD } from "../defaults"
 
 /**
  * Slider - A class that represents slider instance.
@@ -54,6 +54,20 @@ export class Slider {
      * @type {object}
      */
     _circleTrackTapNode
+
+    /**
+     * Lock property indicating slider progress lock.
+     * @private
+     * @type {number}
+     */
+    _lock = false
+
+    /**
+     * Lock degrees property indicating last slider progress deg. before lock.
+     * @private
+     * @type {number}
+     */
+    _lockDegrees = 0
 
     /**
      * Creates a new Slider object.
@@ -194,6 +208,45 @@ export class Slider {
          */
         let degrees = radians * (180 / Math.PI) + 90
         degrees += degrees < 0 ? 360 : 0
+
+        /*
+         * Circle lock implementation used in move events with 10 deg. threshold.
+         */
+        if (event.type !== "click") {
+            if (this._lock) {
+                // Code will execute if degrees are locked.
+                if (
+                    (this._lockDegrees === 360 && degrees < 360 && degrees > 360 - DEFAULT_SLIDER_THRESHOLD) ||
+                    (this._lockDegrees === 0 && degrees >= 0 && degrees <= DEFAULT_SLIDER_THRESHOLD)
+                ) {
+                    /**
+                     * Code will execute if degrees going in right direction, unlock them.
+                     * If deg. locked at 360 and new degrees are < 360 AND <= 350 (default threshold).
+                     * If deg. locked at 0 and new degrees are > 0 AND <= default threshold.
+                     */
+                    this._lock = false
+                } else {
+                    return
+                }
+            } else {
+                // Check if degress are not going right direction
+                if (degrees < DEFAULT_SLIDER_THRESHOLD && this._lockDegrees > 360 - DEFAULT_SLIDER_THRESHOLD) {
+                    // Code will execute if new degress are between 0-10 and if on last change were between 350 and 360. In case locks them to 360.
+                    degrees = 360
+                    this._lock = true
+                } else if (360 - degrees < DEFAULT_SLIDER_THRESHOLD && this._lockDegrees < DEFAULT_SLIDER_THRESHOLD) {
+                    // Code will execute if new degrees value is between 350-360 and if on last change was between 0 and 10. In case locks them to 0.
+                    degrees = 0
+                    this._lock = true
+                }
+            }
+
+            this._lockDegrees = degrees
+        } else {
+            // Reset lock properties to default on click event.
+            this._lock = false
+            this._lockDegrees = 0
+        }
 
         // get X and Y coordinates of the center of the circle relative to circle
         const cx = rect.width / 2
