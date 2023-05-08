@@ -1,21 +1,38 @@
 import CircularSlider from "@circular-slider-task/circular-slider"
 
-const container = document.getElementById("container")
+const container = document.getElementById("slider-container")
 
-const circularSlider = CircularSlider.create({ container, color: "#000000", min: 0, max: 12, step: 3, radius: 60 })
+const transport = CircularSlider.create({ container, color: "#6c4e81", min: 0, max: 1000, step: 1, radius: 210 })
+const transportContainer = document.getElementById("transport")
 
-circularSlider.subscribe("valueChanged", (newValue) => {
-    console.log("circularSlider Property value changed:", newValue)
+transport.subscribe("valueChanged", (newValue) => {
+    transportContainer.children[0].innerText = newValue
 })
 
-const circularSlider2 = CircularSlider.create({ container, color: "#000000", min: -10, max: 10, step: 1, radius: 100 })
+const food = CircularSlider.create({ container, color: "#0477bf", min: 0, max: 1000, step: 1, radius: 170 })
+const foodContainer = document.getElementById("food")
 
-circularSlider2.subscribe("valueChanged", (newValue) => {
-    console.log("circularSlider2 Property value changed:", newValue)
+food.subscribe("valueChanged", (newValue) => {
+    foodContainer.children[0].innerText = newValue
 })
 
-const circularSlider3 = CircularSlider.create({ container, color: "#000000", min: 0, max: 360, step: 1, radius: 200 })
+const insurance = CircularSlider.create({ container, color: "#7dad2a", min: 0, max: 1000, step: 1, radius: 130 })
+const insuranceContainer = document.getElementById("insurance")
 
-circularSlider3.subscribe("valueChanged", (newValue) => {
-    console.log("circularSlider3 Property value changed:", newValue)
+insurance.subscribe("valueChanged", (newValue) => {
+    insuranceContainer.children[0].innerText = newValue
+})
+
+const entertainment = CircularSlider.create({ container, color: "#f08d2a", min: 0, max: 1000, step: 1, radius: 90 })
+const entertainmentContainer = document.getElementById("entertainment")
+
+entertainment.subscribe("valueChanged", (newValue) => {
+    entertainmentContainer.children[0].innerText = newValue
+})
+
+const health_care = CircularSlider.create({ container, color: "#f05746", min: 0, max: 1000, step: 1, radius: 50 })
+const healthCareContainer = document.getElementById("health_care")
+
+health_care.subscribe("valueChanged", (newValue) => {
+    healthCareContainer.children[0].innerText = newValue
 })

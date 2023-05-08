@@ -2,10 +2,54 @@
 <html>
     <head>
         <title>Circular Slider Task - Domen Dornik</title>
+        <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
-        <h1>Circular Slider</h1>
-        <div id="container"></div>
+        <h1>Circular Slider task</h1>
+        <div class="container">
+            <div>
+                <div class="slider-item" id="transport">
+                    <h2>0</h2>
+                    <div class="slider-item-box">
+                        <div class="slider-item-color-indicator" style="background-color: #6c4e81"></div>
+                        <p>Transport</p>
+                    </div>
+                </div>
+                <div class="slider-item" id="food">
+                    <h2>0</h2>
+                    <div class="slider-item-box">
+                        <div class="slider-item-color-indicator" style="background-color: #0477bf"></div>
+                        <p>Food</p>
+                    </div>
+                </div>
+                <div class="slider-item" id="insurance">
+                    <h2>0</h2>
+                    <div class="slider-item-box">
+                        <div class="slider-item-color-indicator" style="background-color: #7dad2a"></div>
+                        <p>Insurance</p>
+                    </div>
+                </div>
+                <div class="slider-item" id="entertainment">
+                    <h2>0</h2>
+                    <div class="slider-item-box">
+                        <div class="slider-item-color-indicator" style="background-color: #f08d2a"></div>
+                        <p>Entertainment</p>
+                    </div>
+                </div>
+                <div class="slider-item" id="health_care">
+                    <h2>0</h2>
+                    <div class="slider-item-box">
+                        <div class="slider-item-color-indicator" style="background-color: #f05746"></div>
+                        <p>Health care</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-content">
+                <div id="slider-container"></div>
+                <p>Adjust dial to enter expenses</p>
+            </div>
+        </div>
+
         <script type="module" src="./index.js"></script>
     </body>
 </html>
