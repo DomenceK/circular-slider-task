@@ -6,15 +6,15 @@
         "./packages/*"
     ],
     "scripts": {
-        "bootstrap:dev": "npm run dev -w @circular-slider-task/client",
-        "bootstrap": "npm run preview -w @circular-slider-task/client"
+        "dev": "npm run dev -w @circular-slider-task/client",
+        "start": "npm run preview -w @circular-slider-task/client"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/DomenceK/circular-slider-task.git"
     },
     "author": "Domen Dornik",
-    "license": "ISC",
+    "license": "UNLICENSED",
     "homepage": "https://github.com/DomenceK/circular-slider-task#readme",
     "devDependencies": {
         "eslint": "8.39.0",

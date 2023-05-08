@@ -21,12 +21,12 @@ slider.subscribe("valueChanged", (value) => {
 ## Setup
 
 1. `npm install` installs dependencies.
-2. Run the `npm run bootstrap` script to run the project
+2. Run the `npm run start` script to run the project in preview mode.
 3. Open [http://localhost:4173](http://localhost:4173) to view Circular slider in the browser.
 
 ### Development
 
-1. `npm run bootstrap:dev` runs the app in the development mode.
+1. `npm run dev` runs the app in the development mode.
 2. Open [http://localhost:5173](http://localhost:5173) to view Circular slider in the browser.
 
 <br>
