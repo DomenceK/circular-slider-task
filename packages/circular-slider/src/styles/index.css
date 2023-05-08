@@ -1,18 +1,4 @@
 /*
- * Root properties
- *
- * White color
- * Knob border color
- * Track stripes color
- */
-
-:root {
-    --color-white: #ffffff;
-    --knob-border: #c8c8c8;
-    --track-color: #c5c5c5;
-}
-
-/*
  * Circular slider container style
  */
 .circular-slider-container {
@@ -32,11 +18,12 @@
     vertical-align: middle;
     transform: rotate(-90deg); /* Orientation */
     position: absolute;
+    pointer-events: none;
 }
 
 .svg-border-track {
     fill: transparent;
-    stroke: var(--track-color);
+    stroke: #c5c5c5;
     stroke-width: 20px; /* Border width */
     stroke-dasharray: 6; /* Border stripes */
 }
@@ -57,9 +44,10 @@
 }
 
 .svg-knob {
-    stroke: var(--knob-border);
-    fill: var(--color-white);
+    stroke: #c8c8c8;
+    fill: #ffffff;
     stroke-width: 2;
-    r: 12px;
+    r: 12px; /* Knob circle radius */
     cursor: pointer;
+    pointer-events: all; /* Allow pointer events and override "none" from container */
 }
