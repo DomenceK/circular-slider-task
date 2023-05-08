@@ -4,6 +4,7 @@
     padding: 12px;
     align-items: center;
     background-image: linear-gradient(to bottom, white, #ebedf0);
+    overflow: auto;
 }
 
 .slider-item {
