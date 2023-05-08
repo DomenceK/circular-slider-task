@@ -3,7 +3,7 @@ import { DrawQueue } from "../draw-queue"
 import { DEFAULT_CIRCLE_OFFSET, DEFAULT_STROKE_WIDTH, DEFAULT_SLIDER_THRESHOLD } from "../defaults"
 
 /**
- * Slider - A class that represents slider instance.
+ * Slider - A class for selecting a value within a circle range.
  */
 export class Slider {
     /**
@@ -139,7 +139,7 @@ export class Slider {
     }
 
     /**
-     * Attaches event listener to knob node.
+     * Attaches event listener for moving and clicking slider.
      * @private
      */
     _attachEventListeners() {
@@ -181,7 +181,7 @@ export class Slider {
     /**
      * Handles move event when it is triggered.
      * Calculates new knob position and slider progress.
-     * @param {Event} event - Mouse / touch event.
+     * @param {Event} event
      * @private
      */
     _handleEvent(event) {
@@ -210,7 +210,7 @@ export class Slider {
         degrees += degrees < 0 ? 360 : 0
 
         /*
-         * Circle lock implementation used in move events with 10 deg. threshold.
+         * Circle lock logic used in move events with 10 deg. threshold.
          */
         if (event.type !== "click") {
             if (this._lock) {
@@ -248,12 +248,13 @@ export class Slider {
             this._lockDegrees = 0
         }
 
-        // get X and Y coordinates of the center of the circle relative to circle
+        // get X and Y coordinates of the center of the circle relative to circle.
         const cx = rect.width / 2
         const cy = rect.height / 2
 
         const { radius, min, max, step } = this._options
 
+        // calculate new slider position
         const position = Slider.calculatePosition(cx, cy, radius, degrees)
 
         // set new knob position
@@ -291,7 +292,7 @@ export class Slider {
     }
 
     /**
-     * A static method that creates new slider node.
+     * A static method that calculates new X and Y coordinate for the knob.
      * @static
      * @param {number} cx - Attribute used to define the X coordinate of the center of a circle.
      * @param {number} cy - Attribute used to define the Y coordinate of the center of a circle.
@@ -356,7 +357,6 @@ export class Slider {
         knobElement.setAttribute("cx", `${containerDimensions - DEFAULT_STROKE_WIDTH / 2 - DEFAULT_CIRCLE_OFFSET / 2}px`)
         knobElement.setAttribute("cy", `${containerDimensions / 2}px`)
 
-        // Painting elements on main svg container. Knob needs to be on top, so it must be painted last.
         svgContainer.appendChild(circleElement)
         svgContainer.appendChild(progressElement)
         svgContainer.appendChild(trackTapElement)
@@ -369,7 +369,7 @@ export class Slider {
      * A static helper method that calculates circle circumfence.
      * @static
      * @param {number} radius - The circle radius.
-     * @returns {number} Circumfence.
+     * @returns {number} circle circumfence.
      */
     static getCircumfence(radius) {
         return 2 * Math.PI * radius

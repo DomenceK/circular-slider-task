@@ -6,9 +6,9 @@ import { Slider } from "./slider"
  */
 export class CircularSlider {
     /**
-     * create - A static method that validates and creates Slider object.
+     * create - A static method that validates and creates new Slider instance.
      *
-     * @param {Object} _options - An object containing options for the CircularSlider.
+     * @param {Object} _options - An object containing options parameters for the CircularSlider.
      * @returns {Slider} Returns new instance of Slider.
      */
     static create(_options) {

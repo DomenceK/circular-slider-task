@@ -19,7 +19,7 @@ export class DrawQueue {
     draw(options, node) {
         const { container, radius } = options
 
-        let spinnerContainer = container.querySelector(".circular-slider-container")
+        let sliderContainer = container.querySelector(".circular-slider-container")
         let containerId = container.getAttribute("circular-slider-id")
 
         if (!containerId) {
@@ -27,24 +27,25 @@ export class DrawQueue {
             // Assigning unique identifier to each new container.
             container.setAttribute("circular-slider-id", containerId)
 
-            // Appending container node that help handles all sliders in container.
-            spinnerContainer = DrawQueue.createCircularSpinnerContainerNode()
-            container.appendChild(spinnerContainer)
+            // Appending container node that help positioning all sliders in container.
+            sliderContainer = DrawQueue.createCircularSliderContainerNode()
+            container.appendChild(sliderContainer)
         }
 
-        // Calcilating spinner dimension with all offsets //
-        const spinnerOffsetDimension = radius * 2 + DEFAULT_CIRCLE_OFFSET + DEFAULT_STROKE_WIDTH
+        // Calculating slider dimension with circle and stroke offset.
+        const sliderOffsetDimension = radius * 2 + DEFAULT_CIRCLE_OFFSET + DEFAULT_STROKE_WIDTH
 
         const data = this._drawQueue.get(containerId)
-        // Check if there are already elements for container
+        // Check if container has no elements
         if (!data) {
-            // Save first element spinner radius
+            // Save first element slider radius
             this._drawQueue.set(containerId, [radius])
 
-            // Set first dimensions and append to spinner container
-            DrawQueue.setContainerDimensions(spinnerContainer, spinnerOffsetDimension)
-            spinnerContainer.appendChild(node)
+            // Set initial container dimensions and append to slider container
+            DrawQueue.setContainerDimensions(sliderContainer, sliderOffsetDimension)
+            sliderContainer.appendChild(node)
         } else {
+            // Sort by radius size
             const radiusArr = data.concat(radius)
             radiusArr.sort((a, b) => b - a)
 
@@ -52,19 +53,19 @@ export class DrawQueue {
             this._drawQueue.set(containerId, radiusArr)
 
             const index = radiusArr.indexOf(radius)
-            // Check if index is 0, means circle has largest radius
+            // Check if index is 0. Means circle has largest radius
             if (index === 0) {
-                // Set new dimension to spinner container
-                DrawQueue.setContainerDimensions(spinnerContainer, spinnerOffsetDimension)
+                // Set new dimension to slider container
+                DrawQueue.setContainerDimensions(sliderContainer, sliderOffsetDimension)
             }
 
             // Inserts new node to specific ordered index
-            spinnerContainer.insertBefore(node, spinnerContainer.children[index])
+            sliderContainer.insertBefore(node, sliderContainer.children[index])
         }
     }
 
     /**
-     * A static method that sets dimensions to the container node
+     * A static method that sets dimensions to the container node.
      * @static
      * @param {object} container - Container node object.
      * @param {number} dimension - Calculated dimension we set to cintainer.
@@ -79,11 +80,11 @@ export class DrawQueue {
      * @static
      * @returns {object} - New circular slider container node.
      */
-    static createCircularSpinnerContainerNode() {
-        const circularSpinnerContainer = document.createElement("div")
-        circularSpinnerContainer.classList.add("circular-slider-container")
+    static createCircularSliderContainerNode() {
+        const circularSliderContainer = document.createElement("div")
+        circularSliderContainer.classList.add("circular-slider-container")
 
-        return circularSpinnerContainer
+        return circularSliderContainer
     }
 
     /**
