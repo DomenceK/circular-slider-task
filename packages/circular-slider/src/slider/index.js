@@ -122,8 +122,9 @@ export class Slider {
      * Triggers specific event and notify listeners.
      * @param {string} eventName - Event name.
      * @param {number} data - Data sent to listeners.
+     * @private
      */
-    triggerEvent(eventName, data) {
+    _triggerEvent(eventName, data) {
         if (eventName === "valueChanged") {
             this._listeners.forEach((listener) => listener(data))
         }
@@ -269,7 +270,7 @@ export class Slider {
 
         const newValue = Slider.calculateValue(degrees, max, min, step)
         // Trigger "propertyChanged" event and send new value to all listeners
-        this.triggerEvent("valueChanged", newValue)
+        this._triggerEvent("valueChanged", newValue)
     }
 
     /**
